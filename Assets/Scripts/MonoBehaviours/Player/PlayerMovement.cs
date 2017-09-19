@@ -13,13 +13,17 @@ public class PlayerMovement : MonoBehaviour
     public float slowingSpeed = 0.175f;
     public float turnSpeedThreshold = 0.5f;
     public float inputHoldDelay = 0.5f;
+    public bool isAttacking = false;
+    public bool isBlocking = false;
+
+    public float playerHealth = 1f;
 
     NoBlock noBlockScript;
-    
+    [SerializeField] private Enemy enemyScript;
 
     private Interactable currentInteractable;
     public Vector3 destinationPosition;
-    private bool handleInput = true;
+    public bool handleInput = true;
     private WaitForSeconds inputHoldWait;
 
 
@@ -59,6 +63,22 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
+    private void FixedUpdate()
+    {
+        if (isAttacking)
+        {
+            RaycastHit hit;
+            Vector3 fwd = transform.TransformDirection(Vector3.forward);
+            if(Physics.Raycast(transform.position,fwd, out hit, 3f))
+            {
+                print("Hit!");
+                enemyScript = hit.collider.gameObject.GetComponent<Enemy>();
+                enemyScript.health = enemyScript.health - 1f;
+                isAttacking = false;
+            }
+        }
+    }
+
     private void Update()
     {
         if (agent.pathPending)
@@ -67,10 +87,12 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetKey("space") && noBlockScript.canBlock == true)
         {
             animator.SetBool("Blocking", true);
+            isBlocking = true;
         }
         else
         {
             animator.SetBool("Blocking", false);
+            isBlocking = false;
         }
 
         float speed = agent.desiredVelocity.magnitude;
@@ -101,6 +123,8 @@ public class PlayerMovement : MonoBehaviour
 
             StartCoroutine (WaitForInteraction ());
         }
+
+        StartCoroutine(FixInput());
     }
 
 
@@ -171,6 +195,12 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
+        handleInput = true;
+    }
+
+    private IEnumerator FixInput()
+    {
+        yield return new WaitForSeconds(1.5f);
         handleInput = true;
     }
 }

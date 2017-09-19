@@ -6,9 +6,11 @@ using UnityEngine.EventSystems;
 
 public class Enemy : MonoBehaviour {
 
-    public Transform player;
+    private GameObject player;
     [SerializeField] float speed = 0.5f;
     [SerializeField] Animator anim;
+    public float health = 4f;
+    
 
     //   [SerializeField] Animator animator;
     //   [SerializeField] Transform target;
@@ -17,19 +19,44 @@ public class Enemy : MonoBehaviour {
     //   [SerializeField] int attackDmg = 1;
     //   [SerializeField] float timeBetweenAttacks;
 
+    private PlayerMovement playerScript;
+    private ZomMeleeAnim zomMelee;
+
     private Vector3 startLocation;
+
+    private void Awake()
+    {
+        player = GameObject.Find("Player");
+    }
 
     void Start()
     {
         anim = GetComponent<Animator>();
+        zomMelee = anim.GetBehaviour<ZomMeleeAnim>();
+        playerScript = player.GetComponent<PlayerMovement>();
         startLocation = transform.position;
+    }
+
+    private void FixedUpdate()
+    {
+        if (zomMelee.isAttacking && playerScript.isBlocking == false)
+        {
+           print("EnemyHit!");
+           playerScript.playerHealth = playerScript.playerHealth - 0.26f;
+           zomMelee.isAttacking = false;
+        }
     }
 
     private void Update()
     {
-        if (Vector3.Distance(player.position, transform.position) < 5f)
+        if(health <= 0)
         {
-            Vector3 direction = player.position - transform.position;
+            Destroy(gameObject);
+        }
+
+        if (Vector3.Distance(player.transform.position, transform.position) < 5f)
+        {
+            Vector3 direction = player.transform.position - transform.position;
             direction.y = 0f;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
 

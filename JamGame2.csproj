@@ -90,10 +90,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\MeleeAnim.cs" />
     <Compile Include="Assets\Scripts\ChangeCamera.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
     <Compile Include="Assets\Scripts\EnemyTerritory.cs" />
     <Compile Include="Assets\Scripts\equip.cs" />
+    <Compile Include="Assets\Scripts\HPController.cs" />
     <Compile Include="Assets\Scripts\MonoBehaviours\Camera\CameraControl.cs" />
     <Compile Include="Assets\Scripts\MonoBehaviours\DataPersistence\BehaviourEnableStateSaver.cs" />
     <Compile Include="Assets\Scripts\MonoBehaviours\DataPersistence\DataResetter.cs" />
@@ -126,6 +128,7 @@
     <Compile Include="Assets\Scripts\ScriptableObjects\Interaction\Reactions\ImmediateReactions\TextReaction.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\Inventory\Item.cs" />
     <Compile Include="Assets\Scripts\ScriptableObjects\ResettableScriptableObject.cs" />
+    <Compile Include="Assets\ZomMeleeAnim.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Fonts\OFL.txt" />
